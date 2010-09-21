@@ -1,15 +1,21 @@
 require 'yaml'
 
 class Table
-  attr_accessor :md_array
+  attr_accessor :md_array, :column_names
   
-  def initialize(source_data_path=nil)
-    import_data(source_data_path) if source_data_path
+  def initialize(source_data=nil, column_names=nil)
+    import_data(source_data) if source_data
   end
   
-  def import_data(source_data_path)
-    data_file = File.open(source_data_path)
-    self.md_array = YAML::load(data_file)
+  def import_data(source_data)
+    if source_data.class == String
+      data_file = File.open(source_data)
+      self.md_array = YAML::load(data_file)
+    elsif source_data.class == Array
+      self.md_array = source_data
+    else
+      puts "invalid source data"
+    end
   end
   
   def return_row(ordinal)
@@ -30,7 +36,7 @@ class Table
     return column
   end
   
-  def column_name(column)
+  def set_column_name(column)
     @column[0]
   end
   
