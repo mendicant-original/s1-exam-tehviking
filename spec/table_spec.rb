@@ -10,13 +10,19 @@ describe Table do
   end
   
   context "initialized with an array" do
-    it "creates an array" do
+    before(:each) do
       table_file = File.open('/Users/bhays/Sites/s1-exam/data/s1-exam-data.yaml')
       table_data = YAML::load(table_file)
       @table = Table.new(table_data)
-      
+    end
+    
+    it "creates an array" do
       @table.md_array.should be_an_instance_of(Array)
       @table.md_array[0][0].should == "PROCEDURE_DATE"
+    end
+    
+    it "generates column names" do
+      @table.column_names[0].should == "PROCEDURE_DATE"
     end
   end
   
@@ -28,6 +34,10 @@ describe Table do
     it "creates an array" do
       @table.md_array.should be_an_instance_of(Array)
       @table.md_array[0][0].should == "PROCEDURE_DATE"
+    end
+    
+    it "generates column names" do
+      @table.column_names[0].should == "PROCEDURE_DATE"
     end
   
     it "returns a row" do
@@ -49,11 +59,40 @@ describe Table do
       
       @table.md_array[1].should == ["05/31/06", "0", "7700", "0", "1888"]
     end
+    
+    it "deletes a row" do
+      @table.delete_row(0)
+      
+      @table.md_array[0][0].should == "05/02/06"
+    end
+    
+    it "transforms a row" do
+      @table.transform_row(0) { |a| a.each { |e| e = "blocky"} }
+      @table.md_array[0][0] == "blocky"
+    end
   
     it "returns a column" do
-      @column = @table.return_column(0) 
+      @column = Column.new(@table, 0) 
     
-      @column[0].should == "PROCEDURE_DATE"
+      @column.col_array[0].should == "PROCEDURE_DATE"
+    end
+    
+    it "finds a cell by index" do
+      cell = @table.find_cell(14, 0)
+      
+      cell.should == "06/13/06"
+    end
+    
+    it "finds a cell by column name" do
+      cell = @table.find_cell(14, "PROCEDURE_DATE")
+      
+      cell.should == "06/13/06"
+    end
+    
+    it "finds a row by index" do
+      row = @table.find_row_by_index(14)
+      
+      row[0].should == "06/13/06"
     end
   end
 end
