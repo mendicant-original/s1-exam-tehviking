@@ -3,7 +3,6 @@ This is Brandon Hays's final exam for RMU.
 Yet to implement:
 
 - Filtering/reducing for rows and columns
-- Column append, insert, delete
-- Look into Row class. Fundamentally different from Column, so should I kick it out?
-- Fix squirrelly block in columns... why would that be any different than the one in rows?
-- Check if further work on block operators is needed.
+- Column append 
+- Column insert 
+- Column delete

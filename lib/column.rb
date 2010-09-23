@@ -1,27 +1,27 @@
 require 'table'
 
 class Column
-  attr_accessor :col_array, :ordinal, :table
+  attr_accessor :data, :ordinal, :table
   
   def initialize(table, ordinal)
-    @col_array = []
+    @data = []
     @name = nil
     @ordinal = ordinal
     @table = table
     
-    @table.md_array.each { |a| @col_array << a[@ordinal] }
+    @table.cells.each { |a| @data << a[@ordinal] }
     
-    return @col_array
+    return @data
   end
   
   def name
-    self.col_array[0]
+    self.data[0]
   end
   
   def set_name(name)
-    self.col_array[0] = name
-    self.update!
-    self.table.generate_column_names
+    data[0] = name
+    update!
+    table.generate_column_names
   end
   
   def insert
@@ -37,13 +37,12 @@ class Column
   end
   
   def transform
-    column = self.col_array
-    yield(column)
+    column = self.data
+    column.map! { |e| yield(e) }
   end
 
-# TODO: There's gotta be a more logical way to update the column
   def update!
-    reverse_col_array = @col_array.reverse
-    @table.md_array.each { |e| e[@ordinal] = reverse_col_array.pop }
+    reverse_data = @data.reverse
+    @table.cells.each { |e| e[@ordinal] = reverse_data.pop }
   end
 end

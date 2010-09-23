@@ -17,8 +17,8 @@ describe Table do
     end
     
     it "creates an array" do
-      @table.md_array.should be_an_instance_of(Array)
-      @table.md_array[0][0].should == "PROCEDURE_DATE"
+      @table.cells.should be_an_instance_of(Array)
+      @table.cells[0][0].should == "PROCEDURE_DATE"
     end
     
     it "generates column names" do
@@ -32,8 +32,8 @@ describe Table do
     end
     
     it "creates an array" do
-      @table.md_array.should be_an_instance_of(Array)
-      @table.md_array[0][0].should == "PROCEDURE_DATE"
+      @table.cells.should be_an_instance_of(Array)
+      @table.cells[0][0].should == "PROCEDURE_DATE"
     end
     
     it "generates column names" do
@@ -50,31 +50,31 @@ describe Table do
       new_row = ["05/31/06", "0", "7700", "0", "1888"]
       @table.append_row(new_row)
       
-      @table.md_array.last.should == ["05/31/06", "0", "7700", "0", "1888"]
+      @table.cells.last.should == ["05/31/06", "0", "7700", "0", "1888"]
     end
     
     it "inserts a row" do
       new_row = ["05/31/06", "0", "7700", "0", "1888"]
       @table.insert_row(new_row, 1)
       
-      @table.md_array[1].should == ["05/31/06", "0", "7700", "0", "1888"]
+      @table.cells[1].should == ["05/31/06", "0", "7700", "0", "1888"]
     end
     
     it "deletes a row" do
       @table.delete_row(0)
       
-      @table.md_array[0][0].should == "05/02/06"
+      @table.cells[0][0].should == "05/02/06"
     end
     
     it "transforms a row" do
-      @table.transform_row(0) { |a| a.each { |e| e = "blocky"} }
-      @table.md_array[0][0] == "blocky"
+      @table.transform_row(0) { |e| "blocky: #{e}" }
+      @table.cells[0][0].should == "blocky: PROCEDURE_DATE"
     end
   
     it "returns a column" do
       @column = Column.new(@table, 0) 
     
-      @column.col_array[0].should == "PROCEDURE_DATE"
+      @column.data[0].should == "PROCEDURE_DATE"
     end
     
     it "finds a cell by index" do

@@ -9,35 +9,36 @@ describe Column do
     end
     
     it "initializes with array" do    
-      @column.col_array[0].should == "AMOUNT"
-      @column.col_array[1].should == "0"
+      @column.data[0].should == "AMOUNT"
+      @column.data[1].should == "0"
     end
     
     it "sets a column name" do
       @column.set_name("Awesome Test Name")
       
-      @column.col_array[0].should == "Awesome Test Name"
-      @table.md_array[0][1].should == "Awesome Test Name"
+      @column.data[0].should == "Awesome Test Name"
+      @table.cells[0][1].should == "Awesome Test Name"
       @table.column_names[1].should == "Awesome Test Name"
     end
     
     it "updates the column" do
-      @column.col_array[0] = "Awesome Test Name 2"
+      @column.data[0] = "Awesome Test Name 2"
       @column.update!
       
-      @table.md_array[0][1].should == "Awesome Test Name 2"
-      @table.md_array[0][0].should == "PROCEDURE_DATE"
-      @table.md_array[3][1].should == "0"
+      @table.cells[0][1].should == "Awesome Test Name 2"
+      @table.cells[0][0].should == "PROCEDURE_DATE"
+      @table.cells[3][1].should == "0"
       @table.column_names[1].should == "Awesome Test Name 2"
     end
     
 # unpredictable result from this test. Best ask about it.
     it "transforms a column" do
-      @column.transform { |a| a[0] = "blocky"}
+      @column.transform { |e| "blocky: #{e}" }
       @column.update!
       
-      @column.col_array[0].should == "blocky"
-      @table.md_array[0][1].should == "blocky"
+      @column.data[0].should == "blocky: AMOUNT"
+      @table.cells[0][1].should == "blocky: AMOUNT"
+      
     end
   end
 end
