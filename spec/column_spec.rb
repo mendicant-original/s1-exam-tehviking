@@ -31,14 +31,18 @@ describe Column do
       @table.column_names[1].should == "Awesome Test Name 2"
     end
     
-# unpredictable result from this test. Best ask about it.
     it "transforms a column" do
       @column.transform { |e| "blocky: #{e}" }
-      @column.update!
-      
+            
       @column.data[0].should == "blocky: AMOUNT"
       @table.cells[0][1].should == "blocky: AMOUNT"
+    end
+    
+    it "deletes a column" do
+      @column.delete!
       
+      @table.cells[0][0].should == "PROCEDURE_DATE"
+      @table.cells[0][1].should == "TARGET_AMOUNT"
     end
   end
 end

@@ -66,7 +66,6 @@ class Table
     Column.new(self, ordinal)
   end
   
-  #TODO: Pair this with filtering
   def find_column_by_index(ordinal)
     Column.new(self, ordinal)
   end

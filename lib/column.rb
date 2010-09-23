@@ -29,16 +29,18 @@ class Column
   end
   
   def append
-    #TODO
+    
   end
   
-  def delete
-    #TODO
+  def delete!
+    @table.cells.each { |a| a.delete_at(@ordinal) }
+    @column = nil
   end
   
   def transform
     column = self.data
     column.map! { |e| yield(e) }
+    update!
   end
 
   def update!

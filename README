@@ -5,4 +5,4 @@ Yet to implement:
 - Filtering/reducing for rows and columns
 - Column append 
 - Column insert 
-- Column delete
+- Fix up names/keys for columns, rows, and tables
