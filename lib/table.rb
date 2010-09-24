@@ -5,6 +5,7 @@ class Table
   attr_accessor :cells, :column_names
   
   def initialize(source_data=nil)
+    @cells = []
     @column_names = []
     import_data(source_data) if source_data
   end
@@ -19,6 +20,22 @@ class Table
       generate_column_names
     else
       puts "invalid source data"
+    end
+  end
+  
+  def [](row, column=nil)
+    if column
+      cells[row][column]
+    else
+      cells[row]
+    end
+  end
+  
+  def []=(row, column, value)
+    if column
+      cells[row][column] = value
+    else
+      cells[row] = value
     end
   end
   
@@ -47,6 +64,19 @@ class Table
     row.map! { |e| yield(e) }
   end
   
+  def reduce_rows
+    old_column_names = @column_names
+    self.cells = cells.select { |e| yield(e) }
+    cells.insert(0, old_column_names)
+    generate_column_names
+  end
+  
+  def reduce_columns
+    rotated_table = cells.transpose
+    reduced_cells = rotated_table.select { |e| yield(e) }
+    self.cells = reduced_cells.transpose
+  end
+  
   def find_cell(row, column)
     if column.class == String
       ordinal = self.column_names.index(column)
@@ -56,7 +86,6 @@ class Table
     end
   end
   
-  #TODO: Pair this with filtering
   def find_row_by_index(ordinal)
     cells[ordinal]
   end

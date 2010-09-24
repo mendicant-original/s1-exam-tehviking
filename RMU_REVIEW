@@ -1,0 +1,9 @@
+This is my final exam.
+
+Feature-wise, it should be complete, if inelegant.
+
+As we reviewed, I didn't create a Row class, since I didn't view the row as being as distinct or complex to implement as a Column. It felt like very little benefit to abstract out 3 or 4 methods into a separate class.
+
+For the sake of a cleaner & more consistent API, I think I'd do it differently next time, though.
+
+This was in itself a great learning experience, not to mention the whole of RMU. Thanks for everything!

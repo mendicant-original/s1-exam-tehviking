@@ -3,19 +3,28 @@ require 'table'
 class Column
   attr_accessor :data, :ordinal, :table
   
-  def initialize(table, ordinal)
-    @data = []
+  def initialize(table, ordinal, data=[])
+    
+    @data = data
     @name = nil
     @ordinal = ordinal
     @table = table
     
-    @table.cells.each { |a| @data << a[@ordinal] }
+    @table.cells.each { |a| @data << a[@ordinal] } if @ordinal
     
     return @data
   end
   
+  def [](ordinal)
+    data[ordinal]
+  end
+  
+  def []=(ordinal, value)
+    data[ordinal] = value
+  end
+  
   def name
-    self.data[0]
+    data[0]
   end
   
   def set_name(name)
@@ -24,12 +33,15 @@ class Column
     table.generate_column_names
   end
   
-  def insert
-    #TODO
+  def insert(ordinal)
+    self.ordinal = ordinal
+    @table.cells.each { |a| a.insert(ordinal, nil) }
+    update!
   end
   
   def append
-    
+    self.ordinal = @table.cells[0].length
+    update!
   end
   
   def delete!

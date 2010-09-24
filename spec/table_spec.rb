@@ -18,7 +18,7 @@ describe Table do
     
     it "creates an array" do
       @table.cells.should be_an_instance_of(Array)
-      @table.cells[0][0].should == "PROCEDURE_DATE"
+      @table[0,0].should == "PROCEDURE_DATE"
     end
     
     it "generates column names" do
@@ -45,6 +45,16 @@ describe Table do
     
       @row[0].should == "PROCEDURE_DATE"
     end
+    
+    it "responds to [] method" do
+      @table[0,0].should == "PROCEDURE_DATE"
+    end
+    
+    it "responds to []= method" do
+      @table[0,0] = "WHAT UP NINJAS"
+      
+      @table[0,0].should == "WHAT UP NINJAS"
+    end
   
     it "appends a row" do
       new_row = ["05/31/06", "0", "7700", "0", "1888"]
@@ -57,18 +67,35 @@ describe Table do
       new_row = ["05/31/06", "0", "7700", "0", "1888"]
       @table.insert_row(new_row, 1)
       
-      @table.cells[1].should == ["05/31/06", "0", "7700", "0", "1888"]
+      @table[1].should == ["05/31/06", "0", "7700", "0", "1888"]
     end
     
     it "deletes a row" do
       @table.delete_row(0)
       
-      @table.cells[0][0].should == "05/02/06"
+      @table[0,0].should == "05/02/06"
     end
     
     it "transforms a row" do
       @table.transform_row(0) { |e| "blocky: #{e}" }
+      
       @table.cells[0][0].should == "blocky: PROCEDURE_DATE"
+    end
+    
+    it "reduces rows with a block" do
+      @table.reduce_rows { |e| e[0] =~ /(06)\/([0-9][0-9])\/(06)/ }
+      
+      @table.cells[1][0].should == "06/13/06"
+      @table.cells.length.should == 220
+    end
+    
+    it "reduces columns with a block" do
+      @table.reduce_columns { |e| e[1300] =~ /(1[0-9+])/ }
+      
+      @table.cells[1300][0].should == "13100"
+      @table.cells[1300][1].should == "13100"
+      @table.cells[1300][2].should == "1302"
+      @table.cells[0].length.should == 3
     end
   
     it "returns a column" do
